@@ -33,6 +33,6 @@ name=PROJECT_NAME,
 version=VERSION,
 author=AUTHOR,
 description=DESRCIPTION,
-packages=find_packages(), 
+packages=find_packages(), # it will contain all folders name whichh are modules ie folders with __init__.py  
 install_requires=get_requirements_list()
 )

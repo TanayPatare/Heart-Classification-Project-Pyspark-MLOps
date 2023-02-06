@@ -10,7 +10,7 @@ WORKDIR /app
 #installing dependencies 
 RUN pip install -r requirements.txt
 
-#Declaring Port for deployment so that it will run onn that port
+#Heroku will assign Port for deployment so we have created a variable. it will run on that port
 EXPOSE $PORT
 
 #To launch flask application
