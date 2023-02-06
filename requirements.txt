@@ -1,0 +1,15 @@
+numpy
+Flask
+gunicorn
+sklearn
+pandas
+PyYAML
+evidently
+dill
+matplotlib
+requests==2.28.1
+jupyterlab==3.4.7  #jupyter notebook
+pyspark==3.2.1
+PyYAML==6.0  
+ipykernel==6.15.0   #kernel for jupyter notebook
+-e .
