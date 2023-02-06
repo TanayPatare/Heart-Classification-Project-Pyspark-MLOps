@@ -8,7 +8,7 @@ COPY . /app
 WORKDIR /app
 
 #installing dependencies 
-RUN pip install -r requirement.txt
+RUN pip install -r requirements.txt
 
 #Declaring Port for deployment so that it will run onn that port
 EXPOSE $PORT
