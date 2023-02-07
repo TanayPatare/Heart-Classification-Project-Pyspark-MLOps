@@ -29,8 +29,14 @@ class HousingException(Exception):
         return error_message
 
     def __str__(self):
+        """
+        This func will be automatically called when we write print(HousingException)
+        """
         return self.error_message
 
 
     def __repr__(self) -> str:
+        """
+        This func will be automatically called when we write HousingException
+        """
         return HousingException.__name__.str()

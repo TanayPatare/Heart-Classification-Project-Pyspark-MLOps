@@ -11,4 +11,5 @@ jupyterlab==3.4.7  #jupyter notebook
 pyspark==3.2.1
 PyYAML
 ipykernel==6.15.0   #kernel for jupyter notebooks
--e .
+-e .  """it means that all folder that contains __init__.py 
+        file will considered as package and will be installed """
