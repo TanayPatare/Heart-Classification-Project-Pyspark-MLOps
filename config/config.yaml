@@ -1,10 +1,11 @@
 training_pipeline_config:
-  pipeline_name: classification
+  artifact_folder_name: Classification
   artifact_dir: artifact
 
 data_ingestion_config:
-  dataset_download_url: # url of dataset
-  csv_download_dir: csv_data
+  dataset_download_url: https://github.com/TanayPatare/CONTENT-BASED-MOVIE-RECOMENDER-SYSTEM/raw/main/Data/heart.rar
+  raw_data_dir: raw_data
+  rar_download_dir: rar_data
   ingested_dir: ingested_data
   ingested_train_dir: train
   ingested_test_dir: test 
