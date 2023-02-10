@@ -2,7 +2,7 @@ from Classification.entity.config_entity import DataIngestionConfig, DataValidat
                                                 DataTransformationConfig, ModelTrainerConfig, \
                                                 ModelEvaluationConfig, ModelPusherConfig, TrainingPipelineConfig
 from Classification.exception import ClassificationException
-#from Classification.logger import logging
+from Classification.logger import logging
 import os
 import sys
 from Classification.utils.util import read_yaml_file
