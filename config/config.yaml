@@ -3,9 +3,9 @@ training_pipeline_config:
   artifact_dir: artifact
 
 data_ingestion_config:
-  dataset_download_url: https://github.com/TanayPatare/CONTENT-BASED-MOVIE-RECOMENDER-SYSTEM/raw/main/Data/heart.rar
+  dataset_download_url: https://github.com/TanayPatare/CONTENT-BASED-MOVIE-RECOMENDER-SYSTEM/raw/main/Data/ezyzip.zip
   raw_data_dir: raw_data
-  rar_download_dir: rar_data
+  rar_download_dir: zip_data
   ingested_dir: ingested_data
   ingested_train_dir: train
   ingested_test_dir: test 

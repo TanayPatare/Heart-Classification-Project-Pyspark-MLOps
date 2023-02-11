@@ -9,7 +9,8 @@ from Classification.config.start_spark_session import spark_session as sp
 from pyspark.sql.types import *
 from config.dataframe_schema import schema
 from pyspark.ml.feature import *
-
+from zipfile import ZipFile
+import pandas as pd
 
 class DataIngestion:
 
@@ -67,7 +68,7 @@ class DataIngestion:
             logging.info(f"Extracting rar file:[{rar_file_path}] into dir [{raw_data_dir}]")
             
             #extracting files from raw_data_dir
-            with tarfile.open(rar_file_path) as classification_rar_file_obj:
+            with ZipFile(rar_file_path) as classification_rar_file_obj:
                 classification_rar_file_obj.extractall(path = raw_data_dir)
 
             logging.info(f"Extraction completed")
@@ -94,7 +95,7 @@ class DataIngestion:
             #Spliting File into training and testing
             logging.info(f"Spliting File into training and testing")
             train_dataset = None
-            test_dataset - None
+            test_dataset = None
             (train_dataset, test_dataset) = Classification_data_frame.randomSplit([0.8, 0.2])
 
             #Creating directory for train and test data
@@ -108,7 +109,7 @@ class DataIngestion:
                 #dumping train data to its respective folder
                 train_dataset.write.csv(path=train_dir)
 
-            if train_dataset is not None:
+            if test_dataset is not None:
                 os.makedirs(test_dir,exist_ok=True)
                 logging.info(f"dumping test data to its respective folder : [{test_dir}]")
                 #dumping test data to its respective folder
