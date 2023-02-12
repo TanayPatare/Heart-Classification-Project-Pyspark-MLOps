@@ -10,7 +10,6 @@ from pyspark.sql.types import *
 from config.dataframe_schema import schema
 from pyspark.ml.feature import *
 from zipfile import ZipFile
-import pandas as pd
 
 class DataIngestion:
 

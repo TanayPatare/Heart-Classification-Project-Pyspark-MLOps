@@ -1,8 +1,8 @@
 from Classification.pipeline.pipeline import Pipeline
+from Classification.logger import logging
+from Classification.config.configuration import Configuration
 
 def main():
-    pipeline = Pipeline()
-    pipeline.run_pipeline()
-
+        pass
 if __name__ == "__main__":
     main()

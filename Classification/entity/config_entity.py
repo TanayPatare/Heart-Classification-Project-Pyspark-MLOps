@@ -10,8 +10,8 @@ DataIngestionConfig = namedtuple("DataIngestionConfig",
 4. ingested_test_dirr : it will consist of folder name for test dataset
 """
 
-DataValidationConfig = namedtuple("DataValidationConfig",
-["schema_file_path"])
+DataValidationConfig = namedtuple("DataValidationConfig", 
+["schema_file_path","report_file_path","report_page_file_path"])
 
 DataTransformationConfig = ("DataTransformationConfig",
 ["transform_train_dir","transform_test_dir","preprocessed_object_file_path"])
