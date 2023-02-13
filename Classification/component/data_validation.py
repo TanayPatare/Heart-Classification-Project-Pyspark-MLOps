@@ -8,8 +8,9 @@ from evidently.model_profile import Profile
 from evidently.model_profile.sections import DataDriftProfileSection
 from evidently.dashboard import Dashboard
 from evidently.dashboard.tabs import DataDriftTab
-from Classification.utils.util import read_yaml_file
+from Classification.utils.util import read_yaml_file,load_dataset
 import json
+from config.dataframe_schema import schema
 
 class DataValidation:
     
@@ -26,8 +27,10 @@ class DataValidation:
 
     def get_train_and_test_df(self):
         try:
-            train_df = spark_session.read.csv(self.data_ingestion_artifact.train_file_path)
-            test_df = spark_session.read.csv(self.data_ingestion_artifact.test_filepath)
+            train_df, test_df = load_dataset(
+                train_file_path=self.data_ingestion_artifact.train_file_path,
+                test_file_path=self.data_ingestion_artifact.test_filepath
+            )
             return train_df,test_df
         except Exception as e:
             raise ClassificationException(e,sys) from e

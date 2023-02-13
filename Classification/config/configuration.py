@@ -64,7 +64,7 @@ class Configuration:
              ingested_train_dirr = ingested_train_dirr, 
              ingested_test_dirr = ingested_test_dirr
             )
-            
+            logging.info(f"Data Ingestion Config Completed")
             return data_ingestion_config
         except Exception as e:
             raise ClassificationException(e,sys) from e
@@ -96,16 +96,51 @@ class Configuration:
             )
 
             data_validation_config = DataValidationConfig(
-                schema_file_path=schema_file_path,
+                schema_file_path==schema_file_path,
                 report_file_path=report_file_path,
                 report_page_file_path=report_page_file_path,
             )
+            logging.info(f"Data Validation Config Completed")
             return data_validation_config
         except Exception as e:
             raise ClassificationException(e,sys) from e
 
     def get_data_transformation_config(self) ->DataTransformationConfig:
-        pass
+        try:
+            artifact_dir = self.training_pipeline_config.artifact_dir
+            data_validation_artifact_dir=os.path.join(
+                artifact_dir,
+                DATA_TRANSFORMATION_ARTIFACT_DIR,
+                self.time_stamp )
+            
+            data_transformation_config_info = self.config_info[DATA_TRANSFORMATION_CONFIG_KEY]
+
+            preprocessed_object_file_path = os.path.join(
+                data_validation_artifact_dir,
+                data_transformation_config_info[DATA_TRANSFORMATION_PREPROCESSING_DIR_KEY],
+                data_transformation_config_info[DATA_TRANSFORMATION_PREPROCESSED_FILE_NAME_KEY]
+            )
+
+            transformed_train_dir = os.path.join(
+                data_validation_artifact_dir,
+                data_transformation_config_info[DATA_TRANSFORMATION_DIR_NAME_KEY],
+                data_transformation_config_info[DATA_TRANSFORMATION_TRAIN_DIR_NAME_KEY]
+            )
+
+            transformed_test_dir = os.path.join(
+                data_validation_artifact_dir,
+                data_transformation_config_info[DATA_TRANSFORMATION_DIR_NAME_KEY],
+                data_transformation_config_info[DATA_TRANSFORMATION_TEST_DIR_NAME_KEY]
+            )
+            data_transformation_config = DataTransformationConfig(
+                preprocessed_object_file_path = preprocessed_object_file_path,
+                transform_train_dir = transformed_train_dir,
+                transform_test_dir = transformed_test_dir
+            )
+            logging.info(f"Data Transformation Config Completed")
+            return data_transformation_config
+        except Exception as e:
+            raise ClassificationException(e,sys) from e
 
     def get_model_trainer_config(self) ->ModelTrainerConfig:
         pass

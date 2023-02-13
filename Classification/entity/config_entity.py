@@ -13,8 +13,8 @@ DataIngestionConfig = namedtuple("DataIngestionConfig",
 DataValidationConfig = namedtuple("DataValidationConfig", 
 ["schema_file_path","report_file_path","report_page_file_path"])
 
-DataTransformationConfig = ("DataTransformationConfig",
-["transform_train_dir","transform_test_dir","preprocessed_object_file_path"])
+DataTransformationConfig = namedtuple("DataTransformationConfig",
+["transform_train_dir","transform_test_dir","preprocessed_object_file_path","add_features_vector"])
 
 """
 1. transform_train_dir : it will consist of folder name for transformed train dataset
