@@ -23,7 +23,7 @@ DataTransformationConfig = namedtuple("DataTransformationConfig",
 """
 
 ModelTrainerConfig = namedtuple("ModelTrainerConfig",
-["trained_model_file_path","base_accuracy"])
+["trained_model_file_path","base_accuracy","model_config_file_path"])
 
 """
 1. trained_model_file_path : it will contain the file path of the new model created

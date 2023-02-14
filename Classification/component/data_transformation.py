@@ -3,6 +3,7 @@ from Classification.logger import logging
 from Classification.entity.config_entity import DataTransformationConfig
 from Classification.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact,DataTransformationArtifact
 import os, sys
+from Classification.constant import FEATURE_COLUMN, TARGET_COLUMN
 from Classification.utils.util import load_dataset
 from pyspark.ml.feature import *
 
@@ -25,7 +26,7 @@ class DataTransformation:
         try:
             feature = VectorAssembler(inputCols = data.columns[:len(data.columns)-1],outputCol="features")
             feature_vector= feature.transform(data)
-            feature_vector_select = feature_vector.select(['features','target'])
+            feature_vector_select = feature_vector.select([FEATURE_COLUMN,TARGET_COLUMN])
             return feature_vector_select
         except Exception as e:
             raise ClassificationException(e,sys) from e

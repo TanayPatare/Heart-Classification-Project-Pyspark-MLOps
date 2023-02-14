@@ -1,17 +1,23 @@
-#Model information
-
-grid_search:
-  class: GridSearchCV
-  module: sklearn.model_selection
-  params:
-    cv: 5
-    verbose: 2
 model_selection:
   module_0:
-    class: RandomForestRegressor
-    module: sklearn.ensemble
+    class: RandomForestClassifier
+    module: pyspark.ml.classification
     params:
-      min_samples_leaf: 3
-    search_param_grid:
-      min_samples_leaf:
-      - 6
+      featuresCol: features
+      labelCol: target
+      predictionCol:  prediction
+    evaluation_module: pyspark.ml.evaluation
+    evaluation_class: MulticlassClassificationEvaluator
+    evaluationmetric:
+      metricName: accuracy
+  module_1:
+    class: LogisticRegression
+    module: pyspark.ml.classification
+    params:
+      featuresCol: features
+      labelCol: target
+      predictionCol:  prediction
+    evaluation_module: pyspark.ml.evaluation
+    evaluation_class: MulticlassClassificationEvaluator
+    evaluationmetric:
+      metricName: accuracy
