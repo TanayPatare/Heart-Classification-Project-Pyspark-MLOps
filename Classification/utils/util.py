@@ -3,6 +3,7 @@ from Classification.exception import ClassificationException
 import os,sys
 from Classification.config.start_spark_session import spark_session
 from config.dataframe_schema import schema
+import dill
 
 
 def read_yaml_file(file_path:str):
@@ -27,3 +28,40 @@ def load_dataset(train_file_path:str, test_file_path:str):
         return train_df, test_df
     except Exception as e:
         raise ClassificationException(e,sys) from e
+
+def save_object(file_path:str,obj):
+    """
+    file_path: str
+    obj: Any sort of object
+    """
+    try:
+        dir_path = os.path.dirname(file_path)
+        os.makedirs(dir_path, exist_ok=True)
+        with open(file_path, "wb") as file_obj:
+            dill.dump(obj, file_obj)
+    except Exception as e:
+        raise ClassificationException(e,sys) from e
+
+def load_object(file_path:str):
+    """
+    file_path: str
+    """
+    try:
+        with open(file_path, "rb") as file_obj:
+            return dill.load(file_obj)
+    except Exception as e:
+        raise ClassificationException(e,sys) from e
+
+def write_yaml_file(file_path:str,data:dict=None):
+    """
+    Create yaml file 
+    file_path: str
+    data: dict
+    """
+    try:
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path,"w") as yaml_file:
+            if data is not None:
+                yaml.dump(data,yaml_file)
+    except Exception as e:
+        raise ClassificationException(e,sys)

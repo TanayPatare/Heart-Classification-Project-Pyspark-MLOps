@@ -2,10 +2,13 @@ from Classification.config.configuration import Configuration
 from Classification.logger import logging
 from Classification.exception import ClassificationException
 from Classification.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact,\
-                                                    DataTransformationArtifact
+                                                    DataTransformationArtifact, ModelTrainerArtifact,\
+                                                        ModelEvaluationArtifact
 from Classification.component.data_ingestion import DataIngestion
 from Classification.component.data_validation import DataValidation
 from Classification.component.data_transformation import DataTransformation
+from Classification.component.model_trainer import ModelTrainer
+from Classification.component.model_evaluation import ModelEvaluation
 import sys
 
 class Pipeline:
@@ -42,16 +45,39 @@ class Pipeline:
         except Exception as e:
             raise ClassificationException(e,sys) from e
 
-    def start_model_trainer(self):
-        pass
-
+    def start_model_trainer(self, data_transformation_artifact: DataTransformationArtifact) -> ModelTrainerArtifact:
+        try:
+            model_trainer = ModelTrainer(model_trainer_config=self.config.get_model_trainer_config(),
+                                         data_transformation_artifact=data_transformation_artifact
+                                         )
+            return model_trainer.initiate_model_trainer()
+        except Exception as e:
+            raise ClassificationException(e, sys) from e
+    def start_model_evaluation(self, 
+                               model_trainer_artifact: ModelTrainerArtifact
+                               ) -> ModelEvaluationArtifact:
+        try:
+            model_eval = ModelEvaluation(
+                model_evaluation_config=self.config.get_model_evaluation_config(),
+                model_trainer_artifact=model_trainer_artifact
+                )
+            return model_eval.initiate_model_evaluation()
+        except Exception as e:
+            raise ClassificationException(e, sys) from e
     def start_model_pusher(self):
         pass
 
     def run_pipeline(self):
         try:
             data_ingestion_artifact = self.start_data_ingestion()
-            data_validation_artifact = self.start_data_validation()
-            data_transformation_artifact = self.start_data_transformation()
+            data_validation_artifact = self.start_data_validation(data_ingestion_artifact=data_ingestion_artifact)
+            data_transformation_artifact = self.start_data_transformation(
+                data_ingestion_artifact=data_ingestion_artifact,
+                data_validation_artifact=data_validation_artifact
+            )
+            model_trainer_artifact = self.start_model_trainer(data_transformation_artifact=data_transformation_artifact)
+            model_evaluation_artifact = self.start_model_evaluation(data_ingestion_artifact=data_ingestion_artifact,
+                                                                    data_validation_artifact=data_validation_artifact,
+                                                                    model_trainer_artifact=model_trainer_artifact)
         except Exception as e:
             raise ClassificationException(e,sys) from e
