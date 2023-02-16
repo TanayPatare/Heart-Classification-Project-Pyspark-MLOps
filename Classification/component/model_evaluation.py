@@ -5,7 +5,7 @@ from Classification.entity.artifact_entity import ModelTrainerArtifact,ModelEval
 from Classification.constant import *
 import os
 import sys
-from Classification.utils.util import write_yaml_file, read_yaml_file, load_object,load_dataset
+from Classification.utils.util import write_yaml_file, read_yaml_file
 from Classification.entity.model_factory import ModelFactory
 
 class ModelEvaluation:
@@ -19,36 +19,11 @@ class ModelEvaluation:
         except Exception as e:
             raise ClassificationException(e, sys) from e
 
-    def get_best_model_production(self):
-        try:
-            # to get the model under production
-            # case1: first time execution
-            model = None
-            model_evaluation_file_path = self.model_evaluation_config.model_evaluation_file_path
-
-            if not os.path.exists(model_evaluation_file_path):
-                write_yaml_file(file_path=model_evaluation_file_path,
-                                )
-                return model
-
-            #case2: Not the first run
-            model_eval_file_content = read_yaml_file(file_path=model_evaluation_file_path)
-            #Not the first run but due to low accuracy model was not created in first run
-            model_eval_file_content = dict() if model_eval_file_content is None else model_eval_file_content
-
-            if BEST_MODEL_KEY not in model_eval_file_content:
-                return model
-
-            model = load_object(file_path=model_eval_file_content[BEST_MODEL_KEY][MODEL_PATH_KEY])
-            return model
-        except Exception as e:
-            raise ClassificationException(e, sys) from e
-
-    def update_evaluation_report(self, model_trainer_artifact: ModelTrainerArtifact):
+    def update_evaluation_report(self, model_trainer_artifact: ModelTrainerArtifact,model_eval_content):
         try:
             eval_file_path = self.model_evaluation_config.model_evaluation_file_path
-            model_eval_content = read_yaml_file(file_path=eval_file_path)
-            model_eval_content = dict() if model_eval_content is None else model_eval_content
+
+            model_eval_content = model_eval_content
             
             
             previous_best_model = None
@@ -83,12 +58,13 @@ class ModelEvaluation:
             newly_trained_model_accuracy = self.model_trainer_artifact.model_accuracy
             eval_file_path = self.model_evaluation_config.model_evaluation_file_path
             model_eval_content = read_yaml_file(file_path=eval_file_path)
+            model_eval_content = dict() if model_eval_content is None else model_eval_content
 
             if model_eval_content is not None:
                 if BEST_MODEL_KEY in model_eval_content:
                     previous_best_model_accuracy = int(model_eval_content[BEST_MODEL_KEY][MODEL_ACCURACY])
                     if newly_trained_model_accuracy > previous_best_model_accuracy:
-                        self.update_evaluation_report(self.model_trainer_artifact)
+                        self.update_evaluation_report(self.model_trainer_artifact,model_eval_content)
                         model_eval_artifact = ModelEvaluationArtifact(
                             is_model_accepted = True,
                             evaluated_model_path = self.model_trainer_artifact.trained_model_file_path
@@ -103,14 +79,14 @@ class ModelEvaluation:
                         )
                         return model_eval_artifact
                 else:
-                    self.update_evaluation_report(self.model_trainer_artifact)
+                    self.update_evaluation_report(self.model_trainer_artifact,model_eval_content)
                     model_eval_artifact = ModelEvaluationArtifact(
                             is_model_accepted = True,
                             evaluated_model_path = self.model_trainer_artifact.trained_model_file_path
                         )
                     return model_eval_artifact
             else:
-                self.update_evaluation_report(self.model_trainer_artifact)
+                self.update_evaluation_report(self.model_trainer_artifact,model_eval_content)
                 model_eval_artifact = ModelEvaluationArtifact(
                             is_model_accepted = True,
                             evaluated_model_path = self.model_trainer_artifact.trained_model_file_path

@@ -64,7 +64,7 @@ class Configuration:
              ingested_train_dirr = ingested_train_dirr, 
              ingested_test_dirr = ingested_test_dirr
             )
-            logging.info(f"Data Ingestion Config Completed")
+            logging.info(f"Data Ingestion Config Completed: {data_ingestion_config}.")
             return data_ingestion_config
         except Exception as e:
             raise ClassificationException(e,sys) from e
@@ -100,7 +100,7 @@ class Configuration:
                 report_file_path=report_file_path,
                 report_page_file_path=report_page_file_path,
             )
-            logging.info(f"Data Validation Config Completed")
+            logging.info(f"Data Validation Config Completed: {data_validation_config}.")
             return data_validation_config
         except Exception as e:
             raise ClassificationException(e,sys) from e
@@ -137,7 +137,7 @@ class Configuration:
                 transform_train_dir = transformed_train_dir,
                 transform_test_dir = transformed_test_dir
             )
-            logging.info(f"Data Transformation Config Completed")
+            logging.info(f"Data Transformation Config Completed: {data_transformation_config}.")
             return data_transformation_config
         except Exception as e:
             raise ClassificationException(e,sys) from e
@@ -168,7 +168,7 @@ class Configuration:
                base_accuracy = base_accuracy,
                model_config_file_path=model_config_file_path
             )
-            logging.info(f"Model Trainer Config Completed")
+            logging.info(f"Model Trainer Config Completed: {model_trainer_config}.")
             return model_trainer_config
             
         except Exception as e:
@@ -191,7 +191,20 @@ class Configuration:
             raise ClassificationException(e,sys) from e
 
     def get_model_pusher_config(self) ->ModelPusherConfig:
-        pass
+        try:
+            model_pusher_config = self.config_info[MODEL_PUSHER_CONFIG_KEY]
+            timestamp = f"{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            export_dir_path = os.path.join(
+                            ROOT_DIR, 
+                            model_pusher_config[MODEL_PUSHER_MODEL_EXPORT_DIR_KEY],
+                            timestamp
+                            )
+            model_pusher_config = ModelPusherConfig(export_dir_path=export_dir_path)
+            
+            logging.info(f"Model Evaluation Config: {model_pusher_config}.")
+            return model_pusher_config
+        except Exception as e:
+            raise ClassificationException(e,sys) from e
     
     def get_training_pipeline_config(self) ->TrainingPipelineConfig:
         try:
