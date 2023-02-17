@@ -11,7 +11,8 @@ CONFIG_FILE_NAME = "config.yaml"
 FEATURE_COLUMN = "features"
 TARGET_COLUMN = "target"
 CONFIG_FILE_PATH = os.path.join(CONFIG_DIR,CONFIG_FILE_NAME)
-
+MODEL_CHECK = "saved_models.yaml"
+MODEL_TRAINER_INDICATOR = "is_training started"
 CURRENT_TIME_STAMP = f"{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}"
 
 # Training pipeline related variable

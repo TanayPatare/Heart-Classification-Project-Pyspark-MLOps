@@ -29,6 +29,17 @@ def load_dataset(train_file_path:str, test_file_path:str):
     except Exception as e:
         raise ClassificationException(e,sys) from e
 
+def load_dataset_for_prediction(data: list, columns:list):
+    
+    """
+    Created to read a dataset in pyspark dataframe
+    """
+    try:
+        pred_df = spark_session.createDataFrame(data, columns,schema=schema)
+        return pred_df
+    except Exception as e:
+        raise ClassificationException(e,sys) from e
+
 def save_object(file_path:str,obj):
     """
     file_path: str
@@ -59,9 +70,14 @@ def write_yaml_file(file_path:str,data:dict=None):
     data: dict
     """
     try:
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        with open(file_path,"w") as yaml_file:
-            if data is not None:
-                yaml.dump(data,yaml_file)
+        if os.path.exists(path=file_path):
+            with open(file_path,"w") as yaml_file:
+                if data is not None:
+                    yaml.dump(data,yaml_file)
+        else:
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path,"w") as yaml_file:
+                if data is not None:
+                    yaml.dump(data,yaml_file)
     except Exception as e:
         raise ClassificationException(e,sys)
